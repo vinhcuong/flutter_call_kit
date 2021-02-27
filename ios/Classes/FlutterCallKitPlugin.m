@@ -498,8 +498,17 @@ continueUserActivity:(NSUserActivity *)userActivity
           localizedCallerName:(NSDictionary * _Nullable)localizedCallerName
                   fromPushKit:(BOOL)fromPushKit
 {
+    BOOL isIQMS = NO;
+    if (localizedCallerName[@"to"] != NULL){
+        isIQMS = YES;
+    }
+    
 #ifdef DEBUG
-    NSLog(@"[FlutterCallKitPlugin][reportNewIncomingCall] uuidString = %@, handle = %@, handleType = %@, hasVideo = %@, localizedCallerName = %@, fromPushKit = %@", uuidString, handle, handleType, @(hasVideo), localizedCallerName[@"aps"][@"callerID"], @(fromPushKit) );
+    if (!isIQMS){
+        NSLog(@"[FlutterCallKitPlugin][reportNewIncomingCall] uuidString = %@, handle = %@, handleType = %@, hasVideo = %@, localizedCallerName = %@, fromPushKit = %@", uuidString, handle, handleType, @(hasVideo), localizedCallerName[@"aps"][@"callerID"], @(fromPushKit) );
+    } else{
+        NSLog(@"[FlutterCallKitPlugin][reportNewIncomingCall] uuidString = %@, handle = %@, handleType = %@, hasVideo = %@, localizedCallerName = %@, fromPushKit = %@", uuidString, handle, handleType, @(hasVideo), localizedCallerName[@"payload"][@"aps"][@"alert"][@"callerID"], @(fromPushKit) );
+    }
 #endif
     int _handleType = [FlutterCallKitPlugin getHandleType:handleType];
     NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:uuidString];
@@ -511,14 +520,26 @@ continueUserActivity:(NSUserActivity *)userActivity
     callUpdate.supportsGrouping = YES;
     callUpdate.supportsUngrouping = YES;
     callUpdate.hasVideo = hasVideo;
-    callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"callerID"];
+    if (!isIQMS){
+        callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"callerID"];
+    }else{
+        callUpdate.localizedCallerName = localizedCallerName[@"payload"][@"aps"][@"alert"][@"callerID"];
+    }
     
     [FlutterCallKitPlugin initCallKitProvider];
-    [sharedProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kIncomingCallNotification
-                                                                object:self
-                                                              userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"], @"fromPushKit": @(fromPushKit)}];
-        }];
+    if (!isIQMS){
+        [sharedProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kIncomingCallNotification
+                                                                    object:self
+                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"], @"fromPushKit": @(fromPushKit)}];
+            }];
+    }else{
+        [sharedProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kIncomingCallNotification
+                                                                    object:self
+                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"payload"][@"aps"][@"alert"][@"callerID"],@"timer":localizedCallerName[@"payload"][@"aps"][@"alert"][@"time"], @"fromPushKit": @(fromPushKit)}];
+            }];
+    }
 }
 
 - (void)handleNewIncomingCall:(NSNotification *)notification
