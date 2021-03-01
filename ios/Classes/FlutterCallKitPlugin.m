@@ -499,7 +499,7 @@ continueUserActivity:(NSUserActivity *)userActivity
                   fromPushKit:(BOOL)fromPushKit
 {
     BOOL isIQMS = NO;
-    if (localizedCallerName[@"to"] != NULL){
+    if (localizedCallerName[@"type"] != NULL){
         isIQMS = YES;
     }
     
@@ -507,7 +507,7 @@ continueUserActivity:(NSUserActivity *)userActivity
     if (!isIQMS){
         NSLog(@"[FlutterCallKitPlugin][reportNewIncomingCall] uuidString = %@, handle = %@, handleType = %@, hasVideo = %@, localizedCallerName = %@, fromPushKit = %@", uuidString, handle, handleType, @(hasVideo), localizedCallerName[@"aps"][@"callerID"], @(fromPushKit) );
     } else{
-        NSLog(@"[FlutterCallKitPlugin][reportNewIncomingCall] uuidString = %@, handle = %@, handleType = %@, hasVideo = %@, localizedCallerName = %@, fromPushKit = %@", uuidString, handle, handleType, @(hasVideo), localizedCallerName[@"payload"][@"aps"][@"alert"][@"callerID"], @(fromPushKit) );
+        NSLog(@"[FlutterCallKitPlugin][reportNewIncomingCall] uuidString = %@, handle = %@, handleType = %@, hasVideo = %@, localizedCallerName = %@, fromPushKit = %@", uuidString, handle, handleType, @(hasVideo), localizedCallerName[@"aps"][@"alert"][@"callerID"], @(fromPushKit) );
     }
 #endif
     int _handleType = [FlutterCallKitPlugin getHandleType:handleType];
@@ -523,7 +523,7 @@ continueUserActivity:(NSUserActivity *)userActivity
     if (!isIQMS){
         callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"callerID"];
     }else{
-        callUpdate.localizedCallerName = localizedCallerName[@"payload"][@"aps"][@"alert"][@"callerID"];
+        callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"alert"][@"callerID"];
     }
     
     [FlutterCallKitPlugin initCallKitProvider];
@@ -537,7 +537,7 @@ continueUserActivity:(NSUserActivity *)userActivity
         [sharedProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:kIncomingCallNotification
                                                                     object:self
-                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"payload"][@"aps"][@"alert"][@"callerID"],@"timer":localizedCallerName[@"payload"][@"aps"][@"alert"][@"time"], @"fromPushKit": @(fromPushKit)}];
+                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"alert"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"][@"time"], @"fromPushKit": @(fromPushKit)}];
             }];
     }
 }
