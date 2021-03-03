@@ -507,7 +507,7 @@ continueUserActivity:(NSUserActivity *)userActivity
     if (!isIQMS){
         NSLog(@"[FlutterCallKitPlugin][reportNewIncomingCall] uuidString = %@, handle = %@, handleType = %@, hasVideo = %@, localizedCallerName = %@, fromPushKit = %@", uuidString, handle, handleType, @(hasVideo), localizedCallerName[@"aps"][@"callerID"], @(fromPushKit) );
     } else{
-        NSLog(@"[FlutterCallKitPlugin][reportNewIncomingCall] uuidString = %@, handle = %@, handleType = %@, hasVideo = %@, localizedCallerName = %@, fromPushKit = %@", uuidString, handle, handleType, @(hasVideo), localizedCallerName[@"aps"][@"alert"][@"callerID"], @(fromPushKit) );
+        NSLog(@"[FlutterCallKitPlugin][reportNewIncomingCall] uuidString = %@, handle = %@, handleType = %@, hasVideo = %@, localizedCallerName = %@, fromPushKit = %@", uuidString, handle, handleType, @(hasVideo), localizedCallerName[@"aps"][@"alert"][@"name"], @(fromPushKit) );
     }
 #endif
     int _handleType = [FlutterCallKitPlugin getHandleType:handleType];
@@ -523,7 +523,7 @@ continueUserActivity:(NSUserActivity *)userActivity
     if (!isIQMS){
         callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"callerID"];
     }else{
-        callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"alert"][@"callerID"];
+        callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"alert"][@"name"];
     }
     
     [FlutterCallKitPlugin initCallKitProvider];
