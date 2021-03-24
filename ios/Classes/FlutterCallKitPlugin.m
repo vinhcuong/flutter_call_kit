@@ -521,7 +521,7 @@ continueUserActivity:(NSUserActivity *)userActivity
     callUpdate.supportsUngrouping = YES;
     callUpdate.hasVideo = hasVideo;
     if (!isIQMS){
-        callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"callerID"];
+        callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"name"];
     }else{
         callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"alert"][@"name"];
     }
