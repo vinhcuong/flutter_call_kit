@@ -525,22 +525,46 @@ continueUserActivity:(NSUserActivity *)userActivity
     }else{
         callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"alert"][@"name"];
     }
-    
+    NSString *typeCall;
     [FlutterCallKitPlugin initCallKitProvider];
     if (!isIQMS){
+        @try {
+            typecall = localizedCallerName[@"aps"][@"typecall"];
+         }
+         @catch (NSException *exception) {
+            NSLog(@"%@", exception.reason);
+             typecall = "";
+         }
+         @finally {
+            NSLog(@"Finally");
+         }
         [sharedProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:kIncomingCallNotification
                                                                     object:self
-                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"], @"fromPushKit": @(fromPushKit)}];
+                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"], @"typeCall": typecall,@"fromPushKit": @(fromPushKit)}];
             }];
     }else{
+        @try {
+            typecall = localizedCallerName[@"aps"][@"alert"][@"typecall"];
+         }
+         @catch (NSException *exception) {
+            NSLog(@"%@", exception.reason);
+             typecall = "";
+         }
+         @finally {
+            NSLog(@"Finally");
+         }
         [sharedProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:kIncomingCallNotification
                                                                     object:self
-                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"alert"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"][@"time"], @"fromPushKit": @(fromPushKit)}];
+                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"alert"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"][@"time"],
+                                                              @"typeCall": typecall,
+                                                              @"fromPushKit": @(fromPushKit)}];
             }];
     }
 }
+
+
 
 - (void)handleNewIncomingCall:(NSNotification *)notification
 {
