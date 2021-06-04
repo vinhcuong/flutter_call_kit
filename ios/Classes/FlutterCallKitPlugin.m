@@ -529,11 +529,11 @@ continueUserActivity:(NSUserActivity *)userActivity
     [FlutterCallKitPlugin initCallKitProvider];
     if (!isIQMS){
         @try {
-            typecall = localizedCallerName[@"aps"][@"typecall"];
+            typeCall = localizedCallerName[@"aps"][@"typecall"];
          }
          @catch (NSException *exception) {
             NSLog(@"%@", exception.reason);
-             typecall = "";
+             typeCall = @"";
          }
          @finally {
             NSLog(@"Finally");
@@ -541,15 +541,15 @@ continueUserActivity:(NSUserActivity *)userActivity
         [sharedProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:kIncomingCallNotification
                                                                     object:self
-                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"], @"typeCall": typecall,@"fromPushKit": @(fromPushKit)}];
+                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"], @"typeCall": typeCall,@"fromPushKit": @(fromPushKit)}];
             }];
     }else{
         @try {
-            typecall = localizedCallerName[@"aps"][@"alert"][@"typecall"];
+            typeCall = localizedCallerName[@"aps"][@"alert"][@"typecall"];
          }
          @catch (NSException *exception) {
             NSLog(@"%@", exception.reason);
-             typecall = "";
+             typeCall = @"";
          }
          @finally {
             NSLog(@"Finally");
@@ -558,7 +558,7 @@ continueUserActivity:(NSUserActivity *)userActivity
                 [[NSNotificationCenter defaultCenter] postNotificationName:kIncomingCallNotification
                                                                     object:self
                                                                   userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"alert"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"][@"time"],
-                                                              @"typeCall": typecall,
+                                                                              @"typeCall": typeCall,
                                                               @"fromPushKit": @(fromPushKit)}];
             }];
     }
