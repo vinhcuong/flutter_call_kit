@@ -541,7 +541,7 @@ continueUserActivity:(NSUserActivity *)userActivity
         [sharedProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:kIncomingCallNotification
                                                                     object:self
-                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"], @"typeCall": typeCall, @"callId": localizedCallerName[@"aps"][@"callid"],@"dataOptions": localizedCallerName[@"aps"][@"dataoptions"],@"fromPushKit": @(fromPushKit)}];
+                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"], @"typeCall": typeCall, @"callId": localizedCallerName[@"aps"][@"callid"],@"dataOptions": localizedCallerName[@"aps"][@"dataoptions"],@"displayName": localizedCallerName[@"aps"][@"name"],@"fromPushKit": @(fromPushKit)}];
             }];
     }else{
         @try {
