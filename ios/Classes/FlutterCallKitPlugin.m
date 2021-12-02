@@ -527,6 +527,12 @@ continueUserActivity:(NSUserActivity *)userActivity
         callUpdate.localizedCallerName = localizedCallerName[@"aps"][@"alert"][@"name"];
     }
     NSString *typeCall;
+    NSString *desMode;
+    if (localizedCallerName[@"aps"][@"toCallCenter"] == @"1"){
+        desMode = @"call_center";
+    }else{
+        desMode = @"client";
+    }
     [FlutterCallKitPlugin initCallKitProvider];
     if (!isIQMS){
         @try {
@@ -542,7 +548,7 @@ continueUserActivity:(NSUserActivity *)userActivity
         [sharedProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:kIncomingCallNotification
                                                                     object:self
-                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"], @"typeCall": typeCall, @"callId": localizedCallerName[@"aps"][@"callid"],@"dataOptions": localizedCallerName[@"aps"][@"dataoptions"],@"displayName": localizedCallerName[@"aps"][@"name"],@"fromPushKit": @(fromPushKit)}];
+                                                                  userInfo:@{ @"error": error ? error.localizedDescription : [NSNull null], @"callUUID": uuidString, @"handle": handle, @"localizedCallerName": localizedCallerName[@"aps"][@"callerID"],@"timer":localizedCallerName[@"aps"][@"alert"], @"typeCall": typeCall, @"callId": localizedCallerName[@"aps"][@"callid"],@"dataOptions": localizedCallerName[@"aps"][@"dataoptions"],@"desMode": desMode,@"displayName": localizedCallerName[@"aps"][@"name"],@"fromPushKit": @(fromPushKit)}];
             }];
     }else{
         @try {
