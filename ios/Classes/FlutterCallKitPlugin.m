@@ -528,7 +528,7 @@ continueUserActivity:(NSUserActivity *)userActivity
     }
     NSString *typeCall;
     NSString *desMode;
-    if (localizedCallerName[@"aps"][@"toCallCenter"] == 1){
+    if ([localizedCallerName[@"aps"][@"toCallCenter"] isEqualToString:@"1"]){
         desMode = @"call_center";
     }else{
         desMode = @"client";
