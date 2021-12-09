@@ -72,8 +72,18 @@ class _MyAppState extends State<MyApp> {
     // - Start playing ringback if it is an outgoing call
   }
 
-  Future<void> _didDisplayIncomingCall(String error, String uuid, String handle,
-      String localizedCallerName, bool fromPushKit) async {
+  Future<void> _didDisplayIncomingCall(
+      String error,
+      String uuid,
+      String handle,
+      String localizedCallerName,
+      String timer,
+      String typeCall,
+      String callId,
+      String dataOptions,
+      String desMode,
+      String displayName,
+      bool fromPushKit) async {
     // You will get this event after RNCallKeep finishes showing incoming call UI
     // You can check if there was an error while displaying
   }

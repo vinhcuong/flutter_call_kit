@@ -1,35 +1,71 @@
+//package com.example.flutter_call_kit
+//
+//import androidx.annotation.NonNull
+//
+//import io.flutter.embedding.engine.plugins.FlutterPlugin
+//import io.flutter.plugin.common.MethodCall
+//import io.flutter.plugin.common.MethodChannel
+//import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+//import io.flutter.plugin.common.MethodChannel.Result
+//import io.flutter.plugin.common.PluginRegistry.Registrar
+//
+//class FlutterCallKitPlugin: FlutterPlugin, MethodCallHandler {
+//  /// The MethodChannel that will the communication between Flutter and native Android
+//  ///
+//  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
+//  /// when the Flutter Engine is detached from the Activity
+//  private lateinit var channel : MethodChannel
+//
+//  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+//    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_call_kit")
+//    channel.setMethodCallHandler(this)
+//  }
+//
+//  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+//    if (call.method == "getPlatformVersion") {
+//      result.success("Android ${android.os.Build.VERSION.RELEASE}")
+//    } else {
+//      result.notImplemented()
+//    }
+//  }
+//
+//  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+//    channel.setMethodCallHandler(null)
+//  }
+//}
+
 package com.example.flutter_call_kit
-
-import androidx.annotation.NonNull
-
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.Registrar
 
-class FlutterCallKitPlugin: FlutterPlugin, MethodCallHandler {
+/** FlutterCallKitNullSafetyPlugin  */
+class FlutterCallKitNullSafetyPlugin : FlutterPlugin, MethodCallHandler {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
   /// when the Flutter Engine is detached from the Activity
-  private lateinit var channel : MethodChannel
+  private var channel: MethodChannel? = null
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_call_kit")
+  @Override
+  fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPluginBinding) {
+    channel = MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_call_kit")
     channel.setMethodCallHandler(this)
   }
 
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
+  @Override
+  fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    if (call.method.equals("getPlatformVersion")) {
+      result.success("Android " + android.os.Build.VERSION.RELEASE)
     } else {
       result.notImplemented()
     }
   }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+  @Override
+  fun onDetachedFromEngine(@NonNull binding: FlutterPluginBinding?) {
     channel.setMethodCallHandler(null)
   }
 }
