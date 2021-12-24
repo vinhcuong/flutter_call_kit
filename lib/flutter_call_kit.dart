@@ -36,7 +36,7 @@ typedef Future<dynamic> OnDeactivateAudioSession();
 /// you might want to do following things when receiving this event:
 /// Start playing ringback if it is an outgoing call
 typedef Future<dynamic> OnIncomingCall(String error, String uuid, String handle,
-    String localizedCallerName,String timer,String typeCall,String callId,String dataOptions, String desMode,String displayName, bool fromPushKit);
+    String localizedCallerName,String timer,String typeCall,String callId,Map dataOptions, String desMode,String displayName, bool fromPushKit);
 
 /// A call was muted by the system or the user:
 ///

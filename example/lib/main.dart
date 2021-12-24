@@ -80,7 +80,7 @@ class _MyAppState extends State<MyApp> {
       String timer,
       String typeCall,
       String callId,
-      String dataOptions,
+      Map dataOptions,
       String desMode,
       String displayName,
       bool fromPushKit) async {
