@@ -109,8 +109,8 @@ class IOSOptions {
       "appName": appName,
       "imageName": imageName,
       "ringtoneSound": ringtoneSound,
-      "maximumCallGroups": maximumCallGroups?.toString(),
-      "maximumCallsPerCallGroup": maximumCallsPerCallGroup?.toString(),
+      "maximumCallGroups": maximumCallGroups.toString(),
+      "maximumCallsPerCallGroup": maximumCallsPerCallGroup.toString(),
       "supportsVideo": supportsVideo,
       "includesCallsInRecents": includesCallsInRecents,
     };
@@ -128,57 +128,57 @@ class FlutterCallKit {
 
   final MethodChannel _channel;
 
-  OnReceiveStartCallAction _didReceiveStartCallAction;
+  OnReceiveStartCallAction? _didReceiveStartCallAction;
 
   /// this means something big changed, so tell the Dart side. The Dart side should
   /// probably respond by hanging up all calls.
-  VoidCallback _onProviderReset;
+  VoidCallback? _onProviderReset;
 
-  OnAnswerCallAction _performAnswerCallAction;
+  OnAnswerCallAction? _performAnswerCallAction;
 
-  OnEndCallAction _performEndCallAction;
+  OnEndCallAction? _performEndCallAction;
 
-  OnActivateAudioSession _didActivateAudioSession;
+  OnActivateAudioSession? _didActivateAudioSession;
 
-  OnDeactivateAudioSession _didDeactivateAudioSession;
+  OnDeactivateAudioSession? _didDeactivateAudioSession;
 
-  OnIncomingCall _didDisplayIncomingCall;
+  OnIncomingCall? _didDisplayIncomingCall;
 
-  OnMuted _didPerformSetMutedCallAction;
-  OnHold _didToggleHoldAction;
-  OnDTMF _didPerformDTMFAction;
+  OnMuted? _didPerformSetMutedCallAction;
+  OnHold? _didToggleHoldAction;
+  OnDTMF? _didPerformDTMFAction;
 
-  OnStartCall _handleStartCallNotification;
+  OnStartCall? _handleStartCallNotification;
 
   /// Configures with [options] and sets up handlers for incoming messages.
   void configure(
     IOSOptions options, {
-    OnReceiveStartCallAction didReceiveStartCallAction,
-    VoidCallback onProviderReset,
-    OnAnswerCallAction performAnswerCallAction,
-    OnEndCallAction performEndCallAction,
-    OnActivateAudioSession didActivateAudioSession,
-    OnDeactivateAudioSession didDeactivateAudioSession,
-    OnIncomingCall didDisplayIncomingCall,
-    OnMuted didPerformSetMutedCallAction,
-    OnDTMF didPerformDTMFAction,
-    OnHold didToggleHoldAction,
-    OnStartCall handleStartCallNotification,
+    OnReceiveStartCallAction? didReceiveStartCallAction,
+    VoidCallback? onProviderReset,
+    OnAnswerCallAction? performAnswerCallAction,
+    OnEndCallAction? performEndCallAction,
+    OnActivateAudioSession? didActivateAudioSession,
+    OnDeactivateAudioSession? didDeactivateAudioSession,
+    OnIncomingCall? didDisplayIncomingCall,
+    OnMuted? didPerformSetMutedCallAction,
+    OnDTMF? didPerformDTMFAction,
+    OnHold? didToggleHoldAction,
+    OnStartCall? handleStartCallNotification,
   }) {
     if (!Platform.isIOS) {
       return;
     }
-    _didReceiveStartCallAction = didReceiveStartCallAction;
-    _onProviderReset = onProviderReset;
-    _performAnswerCallAction = performAnswerCallAction;
-    _performEndCallAction = performEndCallAction;
-    _didActivateAudioSession = didActivateAudioSession;
-    _didDeactivateAudioSession = didDeactivateAudioSession;
-    _didDisplayIncomingCall = didDisplayIncomingCall;
-    _didPerformSetMutedCallAction = didPerformSetMutedCallAction;
-    _didPerformDTMFAction = didPerformDTMFAction;
-    _didToggleHoldAction = didToggleHoldAction;
-    _handleStartCallNotification = handleStartCallNotification;
+    _didReceiveStartCallAction = didReceiveStartCallAction!;
+    _onProviderReset = onProviderReset!;
+    _performAnswerCallAction = performAnswerCallAction!;
+    _performEndCallAction = performEndCallAction!;
+    _didActivateAudioSession = didActivateAudioSession!;
+    _didDeactivateAudioSession = didDeactivateAudioSession!;
+    _didDisplayIncomingCall = didDisplayIncomingCall!;
+    _didPerformSetMutedCallAction = didPerformSetMutedCallAction!;
+    _didPerformDTMFAction = didPerformDTMFAction!;
+    _didToggleHoldAction = didToggleHoldAction!;
+    _handleStartCallNotification = handleStartCallNotification!;
     _channel.setMethodCallHandler(_handleMethod);
     _channel.invokeMethod<void>('configure', options.toMap());
   }
@@ -190,66 +190,66 @@ class FlutterCallKit {
           return null;
         }
         Map map = call.arguments.cast<String, dynamic>();
-        return _didReceiveStartCallAction(map["callUUID"], map["handle"]);
+        return _didReceiveStartCallAction!(map["callUUID"], map["handle"]);
       case "onProviderReset":
         if (_onProviderReset == null) {
           return null;
         }
-        return _onProviderReset();
+        return _onProviderReset!();
       case "performAnswerCallAction":
         if (_performAnswerCallAction == null) {
           return null;
         }
-        return _performAnswerCallAction(
+        return _performAnswerCallAction!(
             call.arguments.cast<String, dynamic>()["callUUID"]);
       case "performEndCallAction":
         if (_performEndCallAction == null) {
           return null;
         }
-        return _performEndCallAction(
+        return _performEndCallAction!(
             call.arguments.cast<String, dynamic>()["callUUID"]);
       case "didActivateAudioSession":
         if (_didActivateAudioSession == null) {
           return null;
         }
-        return _didActivateAudioSession();
+        return _didActivateAudioSession!();
       case "didDeactivateAudioSession":
         if (_didDeactivateAudioSession == null) {
           return null;
         }
-        return _didDeactivateAudioSession();
+        return _didDeactivateAudioSession!();
       case "didDisplayIncomingCall":
         if (_didDisplayIncomingCall == null) {
           print("_didDisplayIncomingCall is null");
           return null;
         }
         Map map = call.arguments.cast<String, dynamic>();
-        return _didDisplayIncomingCall(map["error"], map["callUUID"],
+        return _didDisplayIncomingCall!(map["error"], map["callUUID"],
             map["handle"], map["localizedCallerName"],map["timer"],map["typeCall"],map["callId"],map["dataOptions"],map["desMode"],map["displayName"], map["fromPushKit"]);
       case "didPerformSetMutedCallAction":
         if (_didPerformSetMutedCallAction == null) {
           return null;
         }
         Map map = call.arguments.cast<String, dynamic>();
-        return _didPerformSetMutedCallAction(map["muted"], map["callUUID"]);
+        return _didPerformSetMutedCallAction!(map["muted"], map["callUUID"]);
       case "didPerformDTMFAction":
         if (_didPerformDTMFAction == null) {
           return null;
         }
         Map map = call.arguments.cast<String, dynamic>();
-        return _didPerformDTMFAction(map["digits"], map["callUUID"]);
+        return _didPerformDTMFAction!(map["digits"], map["callUUID"]);
       case "didToggleHoldAction":
         if (_didToggleHoldAction == null) {
           return null;
         }
         Map map = call.arguments.cast<String, dynamic>();
-        return _didToggleHoldAction(map["hold"], map["callUUID"]);
+        return _didToggleHoldAction!(map["hold"], map["callUUID"]);
       case "handleStartCallNotification":
         if (_handleStartCallNotification == null) {
           return null;
         }
         Map map = call.arguments.cast<String, dynamic>();
-        return _handleStartCallNotification(map["handle"], map["video"]);
+        return _handleStartCallNotification!(map["handle"], map["video"]);
       default:
         throw UnsupportedError("Unrecognized JSON message");
     }
@@ -376,7 +376,7 @@ class FlutterCallKit {
   ///
   Future<bool> checkIfBusy() async {
     if (!Platform.isIOS) {
-      return null;
+      return false;
     }
     return await _channel.invokeMethod<void>('checkIfBusy') as bool;
   }
@@ -385,7 +385,7 @@ class FlutterCallKit {
   ///
   Future<bool> checkSpeaker() async {
     if (!Platform.isIOS) {
-      return null;
+      return false;
     }
     return await _channel.invokeMethod<void>('checkSpeaker') as bool;
   }

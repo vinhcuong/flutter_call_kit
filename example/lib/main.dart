@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:uuid/uuid.dart';
+// import 'package:uuid/uuid.dart';
 import 'package:flutter_call_kit/flutter_call_kit.dart';
 
 void main() => runApp(MyApp());
@@ -11,8 +11,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _configured;
-  String _currentCallId;
+  bool? _configured;
+  String? _currentCallId;
   FlutterCallKit _callKit = FlutterCallKit();
   @override
   void initState() {
@@ -35,6 +35,9 @@ class _MyAppState extends State<MyApp> {
       didPerformSetMutedCallAction: _didPerformSetMutedCallAction,
       didPerformDTMFAction: _didPerformDTMFAction,
       didToggleHoldAction: _didToggleHoldAction,
+      onProviderReset: _onProviderReset,
+      didDeactivateAudioSession: _didDeactivateAudioSession,
+      handleStartCallNotification: _handleStartCallNotification,
     );
     setState(() {
       _configured = true;
@@ -100,13 +103,26 @@ class _MyAppState extends State<MyApp> {
     // Called when the system or user holds a call
   }
 
+  Future<void> _onProviderReset() async {
+    // Called on provider reset
+  }
+
+  Future<void> _didDeactivateAudioSession() async {
+    // Called when deactivate audio session
+  }
+
+  Future<void> _handleStartCallNotification(String handle,bool video) async {
+    // Called when start call notification
+  }
+
   String get currentCallId {
     if (_currentCallId == null) {
-      final uuid = new Uuid();
-      _currentCallId = uuid.v4();
+      // final uuid = new Uuid();
+      // _currentCallId = uuid.v4();
+      _currentCallId = "an-unique-uuid";
     }
 
-    return _currentCallId;
+    return _currentCallId!;
   }
 
   @override
