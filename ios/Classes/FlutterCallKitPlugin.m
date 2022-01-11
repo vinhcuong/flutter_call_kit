@@ -390,7 +390,8 @@ static CXProvider* sharedProvider;
     providerConfiguration.supportsVideo = YES;
     providerConfiguration.maximumCallGroups = 3;
     providerConfiguration.maximumCallsPerCallGroup = 1;
-    providerConfiguration.supportedHandleTypes = [NSSet setWithObjects:[NSNumber numberWithInteger:CXHandleTypePhoneNumber], nil];
+//    providerConfiguration.supportedHandleTypes = [NSSet setWithObjects:[NSNumber numberWithInteger:CXHandleTypePhoneNumber], nil];
+    providerConfiguration.supportedHandleTypes = [NSSet setWithObjects:[NSNumber numberWithInteger:CXHandleTypeGeneric],[NSNumber numberWithInteger:CXHandleTypePhoneNumber], [NSNumber numberWithInteger:CXHandleTypeEmailAddress], nil];
     if (@available(iOS 11.0, *)) {
         providerConfiguration.includesCallsInRecents = [settings[@"includesCallsInRecents"] boolValue];
     }
@@ -452,8 +453,10 @@ continueUserActivity:(NSUserActivity *)userActivity
     // iOS 13 returns an INStartCallIntent userActivity type
     if (@available(iOS 13, *)) {
         INStartCallIntent *intent = (INStartCallIntent*)interaction.intent;
-        isAudioCall = intent.callCapability == INCallCapabilityAudioCall;
-        isVideoCall = intent.callCapability == INCallCapabilityVideoCall;
+        //  isAudioCall = intent.callCapability == INCallCapabilityAudioCall;
+        //  isVideoCall = intent.callCapability == INCallCapabilityVideoCall;
+        isAudioCall = [intent isKindOfClass:[INStartAudioCallIntent class]];
+        isVideoCall = [intent isKindOfClass:[INStartVideoCallIntent class]];
     } else {
 #endif
         //XCode 10 and below
@@ -475,6 +478,7 @@ continueUserActivity:(NSUserActivity *)userActivity
     
     if (contact != nil) {
         handle = contact.personHandle.value;
+        NSLog(@"Contact description: %@",contact.description);
     }
     
     if (handle != nil && handle.length > 0 ){
