@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 /// Note: on iOS `callUUID` is not defined as the call is not yet managed by CallKit. You have to generate your own and call `startCall`.
 /// [uuid] - The UUID of the call that is to be answered
 /// [handle] - Phone number of the callee see [HandleType] for other options
-typedef Future<dynamic> OnReceiveStartCallAction(String uuid, String handle);
+typedef Future<dynamic> OnReceiveStartCallAction(String dest, bool video);
 
 /// User answer the incoming call
 ///
@@ -190,7 +190,7 @@ class FlutterCallKit {
           return null;
         }
         Map map = call.arguments.cast<String, dynamic>();
-        return _didReceiveStartCallAction(map["callUUID"], map["handle"]);
+        return _didReceiveStartCallAction(map["handle"], map["video"]);
       case "onProviderReset":
         if (_onProviderReset == null) {
           return null;

@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
 
   /// Event Listener Callbacks
 
-  Future<void> _didReceiveStartCallAction(String uuid, String handle) async {
+  Future<void> _didReceiveStartCallAction(String dest, bool video) async {
     // Get this event after the system decides you can start a call
     // You can now start a call from within your app
   }
