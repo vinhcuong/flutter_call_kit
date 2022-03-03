@@ -224,7 +224,8 @@ class FlutterCallKit {
           return null;
         }
         Map map = call.arguments.cast<String, dynamic>();
-        return _didDisplayIncomingCall!(map["error"], map["callUUID"],
+        String error = map["error"] ?? "error_not_exists";
+        return _didDisplayIncomingCall!(error, map["callUUID"],
             map["handle"], map["localizedCallerName"],map["timer"],map["typeCall"],map["callId"],map["dataOptions"],map["desMode"],map["displayName"], map["fromPushKit"]);
       case "didPerformSetMutedCallAction":
         if (_didPerformSetMutedCallAction == null) {
