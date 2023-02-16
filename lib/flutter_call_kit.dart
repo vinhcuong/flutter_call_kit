@@ -368,7 +368,7 @@ class FlutterCallKit {
     }
     await _channel.invokeMethod<void>('setMutedCall', {
       'uuid': uuid,
-      'mute': mute,
+      'muted': mute,
     });
   }
 
